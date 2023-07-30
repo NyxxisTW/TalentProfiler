@@ -1,0 +1,880 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.blizzard.com/wow/ui/..\FrameXML\UI.xsd">
+
+
+    <Texture name="TP_TalentTextureTemplate" virtual="true">
+        <Size x="32" y="32"/>
+    </Texture>
+
+	<Texture name="TP_TreeBackgroundTextureTemplate" virtual="true">
+		<Size x="330" y="330"/>
+		<Anchors>
+			<Anchor point="BOTTOM">
+				<Offset x="0" y="0"/>
+			</Anchor>
+		</Anchors>
+	</Texture>
+
+	<Font name="TP_FontSmall" font="Interface\AddOns\TalentProfiler\Arial-Nova.ttf"
+		  justifyH="LEFT" virtual="true">
+		<FontHeight val="10"/>
+	</Font>
+
+	<Font name="TP_FontSmallRight" font="Interface\AddOns\TalentProfiler\Arial-Nova.ttf"
+		  justifyH="RIGHT" virtual="true">
+		<FontHeight val="10"/>
+	</Font>
+
+	<Font name="TP_FontNormal" font="Interface\AddOns\TalentProfiler\Arial-Nova.ttf"
+		  justifyH="LEFT" virtual="true">
+		<FontHeight val="11"/>
+	</Font>
+
+	<Font name="TP_FontTitle" font="Interface\AddOns\TalentProfiler\Arial-Nova.ttf"
+		  justifyH="CENTER" virtual="true" outline="THICK">
+		<FontHeight val="14"/>
+	</Font>
+
+	<Font name="TP_FontSubTitle" font="Interface\AddOns\TalentProfiler\Arial-Nova.ttf"
+		  justifyH="CENTER" virtual="true">
+		<FontHeight val="11"/>
+		<Color r="1" g="1" b="0" a="1"/>
+	</Font>
+
+	<Font name="TP_FontSubTitleLeft" font="Interface\AddOns\TalentProfiler\Arial-Nova.ttf"
+		  justifyH="LEFT" virtual="true">
+		<FontHeight val="11"/>
+		<Color r="1" g="1" b="0" a="1"/>
+	</Font>
+
+	<Font name="TP_FontSubTitleRight" font="Interface\AddOns\TalentProfiler\Arial-Nova.ttf"
+		  justifyH="RIGHT" virtual="true">
+		<FontHeight val="11"/>
+		<Color r="1" g="1" b="0" a="1"/>
+	</Font>
+
+	<Font name="TP_FontSpecialization" font="Interface\AddOns\TalentProfiler\Arial-Nova.ttf"
+		  justifyH="LEFT" virtual="true" outline="THICK">
+		<FontHeight val="12"/>
+	</Font>
+
+	<Font name="TP_FontSpecializationPoints" font="Interface\AddOns\TalentProfiler\Arial-Nova.ttf"
+		  justifyH="LEFT" virtual="true" outline="THICK">
+		<FontHeight val="12"/>
+		<Color r="1" g="1" b="0" a="1"/>
+	</Font>
+
+	<Font name="TP_FontX" font="Interface\AddOns\TalentProfiler\Arial-Nova.ttf"
+		  justifyH="CENTER" virtual="true">
+		<FontHeight val="18"/>
+		<Color r="0" g="0" b="0" a="1"/>
+	</Font>
+
+	<Font name="TP_FontPopupMessage" font="Interface\AddOns\TalentProfiler\Arial-Nova.ttf"
+		  justifyH="CENTER" virtual="true" outline="THICK">
+		<FontHeight val="12"/>
+	</Font>
+
+	<Font name="TP_FontButton" font="Interface\AddOns\TalentProfiler\Arial-Nova.ttf"
+		  justifyH="CENTER" virtual="true">
+		<FontHeight val="12"/>
+	</Font>
+
+
+	<!-- TREE DESCRIPTION TEMPLATE -->
+	<Frame name="TP_TreeDescriptionTemplateFrame" virtual="true">
+		<Size x="36" y="36"/>
+		<Anchors>
+			<Anchor point="TOPLEFT">
+				<Offset x="1" y="-1"/>
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer level="BORDER">
+				<Texture name="$parent_Icon">
+					<Size x="36" y="36"/>
+					<Anchors>
+						<Anchor point="CENTER">
+							<Offset x="0" y="0"/>
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<FontString name="$parent_TreeName" font="TP_FontSpecialization">
+					<Size x="176" y="36"/>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parent_Icon" relativePoint="RIGHT">
+							<Offset x="2" y="8"/>
+						</Anchor>
+					</Anchors>
+					<Color r="1" g="1" b="1" a="1"/>
+				</FontString>
+				<FontString name="$parent_PointsSpent" text="Points spent:" font="TP_FontSpecializationPoints">
+					<Size x="176" y="36"/>
+					<Anchors>
+						<Anchor point="LEFT"  relativeTo="$parent_Icon" relativePoint="RIGHT">
+							<Offset x="2" y="-8"/>
+						</Anchor>
+					</Anchors>
+					<Color r="1" g="1" b="0" a="1"/>
+				</FontString>
+				<Texture>
+					<Size x="168" y="3"/>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT">
+							<Offset x="3" y="0"/>
+						</Anchor>
+					</Anchors>
+					<Color r="0.15" g="0.15" b="0.15" a="1"/>
+				</Texture>
+			</Layer>
+			<Layer level="BACKGROUND">
+				<Texture>
+					<Size x="168" y="33"/>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="2" y="-2"/>
+						</Anchor>
+					</Anchors>
+					<Color r="0" g="0" b="0" a="0.5"/>
+				</Texture>
+			</Layer>
+		</Layers>
+	</Frame>
+
+
+
+	<!--
+		<Button name="TP_MinimapButton" enableMouse="true" movable="true" >
+		<TitleRegion setAllPoints="true"/>
+		<Size x="53" y="53"/>
+				<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+
+		<Layers>
+			<Layer level="OVERLAY">
+				<Texture file="Interface\Minimap\MiniMap-TrackingBorder">
+					<Size x="54" y="54"/>
+					<Anchors>
+						<Anchor point="CENTER"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BACKGROUND">
+				<Texture file="Interface\Icons\spell_nature_starfall">
+					<Size x="26" y="26"/>
+					<Anchors>
+						<Anchor point="CENTER"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="HIGHLIGHT">
+				<Texture file="Interface\Minimap\UI-Minimap-ZoomButton-Highlight">
+					<Size x="54" y="54"/>
+					<Anchors>
+						<Anchor point="CENTER"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			</Layers>
+	</Button>
+	-->
+
+	<!-- TREE CLEAR BUTTON -->
+	<Button name="TP_TreeClearButtonTemplate" virtual="true">
+		<Size x="10" y="10"/>
+		<Anchors>
+			<Anchor point="TOPRIGHT">
+				<Offset x="-3" y="-13"/>
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer level="OVERLAY">
+				<Texture file="Interface\AddOns\TalentProfiler\X0">
+					<Size x="8" y="8"/>
+					<Anchors>
+						<Anchor point="CENTER"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+	</Button>
+
+	<!-- TREE BACKGROUND TEMPLATE -->
+	<ScrollFrame name="TP_TreeBackgroundTemplateFrame" virtual="true" frameStrata="HIGH">
+		<Size x="174" y="294"/>
+		<Anchors>
+			<Anchor point="TOPLEFT">
+				<Offset x="0" y="-34"/>
+			</Anchor>
+		</Anchors>
+		<ScrollChild>
+			<Frame>
+				<Size x="174" y="294"/>
+				<Frames>
+					<Frame name="$parentTexture">
+						<Size x="294" y="294"/>
+						<Anchors>
+							<Anchor point="CENTER">
+								<Offset x="12" y="0"/>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer level="BACKGROUND">
+								<Texture name="$parent_TopLeft">
+									<Size x="228" y="228"/>
+									<Anchors>
+										<Anchor point="TOPLEFT"/>
+									</Anchors>
+								</Texture>
+								<Texture name="$parent_TopRight">
+									<Size x="57" y="228"/>
+									<Anchors>
+										<Anchor point="LEFT" relativeTo="$parent_TopLeft" relativePoint="RIGHT"/>
+									</Anchors>
+								</Texture>
+								<Texture name="$parent_BottomLeft">
+									<Size x="228" y="114"/>
+									<Anchors>
+										<Anchor point="TOP" relativeTo="$parent_TopLeft" relativePoint="BOTTOM"/>
+									</Anchors>
+								</Texture>
+								<Texture name="$parent_BottomRight">
+									<Size x="57" y="114"/>
+									<Anchors>
+										<Anchor point="TOP" relativeTo="$parent_TopRight" relativePoint="BOTTOM"/>
+									</Anchors>
+								</Texture>
+							</Layer>
+						</Layers>
+					</Frame>
+				</Frames>
+			</Frame>
+		</ScrollChild>
+	</ScrollFrame>
+
+
+	<Frame name="TP_MainFrame" toplevel="false" parent="UIParent"
+		   hidden="true" enableMouse="true" movable="true" frameStrata="DIALOG">
+		<TitleRegion setAllPoints="true"/>
+		<Size x="722" y="338"/>
+		<Anchors>
+			<Anchor point="CENTER">
+				<Offset x="0" y="0"/>
+			</Anchor>
+		</Anchors>
+
+		<Frames>
+			<!-- TOP BAR -->
+			<Frame name="TP_TopBar">
+				<Size x="722" y="12"/>
+				<Anchors>
+					<Anchor point="TOPLEFT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="BORDER">
+						<Texture>
+							<Color r="0" g="0" b="0" a="0.75"/>
+						</Texture>
+					</Layer>
+				</Layers>
+				<Frames>
+					<!-- CLOSE BUTTON -->
+					<Button name="TP_ButtonCloseWidnow">
+						<Size x="12" y="12"/>
+						<Anchors>
+							<Anchor point="TOPRIGHT">
+								<Offset x="0" y="0"/>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer level="OVERLAY">
+								<Texture file="Interface\AddOns\TalentProfiler\X1">
+									<Size x="10" y="10"/>
+									<Anchors>
+										<Anchor point="CENTER"/>
+									</Anchors>
+								</Texture>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnClick>
+								TP_MainFrame:Hide()
+							</OnClick>
+						</Scripts>
+					</Button>
+				</Frames>
+			</Frame>
+
+			<!-- PROFILES -->
+			<Frame name="TP_Profiles">
+				<Size x="200" y="328"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="TP_TopBar" relativePoint="BOTTOMLEFT">
+						<Offset x="0" y="0"/>
+					</Anchor>
+				</Anchors>
+				<Frames>
+
+					<!-- PROFILES - TITLE -->
+					<Frame name="$parent_Title">
+						<Size x="194" y="36"/>
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset x="3" y="0"/>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer level="BORDER">
+								<FontString text="Saved profiles" font="TP_FontTitle">
+									<Size x="194" y="36"/>
+									<Anchors>
+										<Anchor point="CENTER"/>
+									</Anchors>
+									<Color r="1" g="1" b="1" a="1"/>
+								</FontString>
+								<Texture>
+									<Size x="194" y="3"/>
+									<Anchors>
+										<Anchor point="BOTTOM">
+											<Offset x="0" y="0"/>
+										</Anchor>
+									</Anchors>
+									<Color r="0.15" g="0.15" b="0.15" a="1"/>
+								</Texture>
+							</Layer>
+							<Layer level="BACKGROUND">
+								<Texture>
+									<Size x="194" y="33"/>
+									<Anchors>
+										<Anchor point="BOTTOM">
+											<Offset x="0" y="0"/>
+										</Anchor>
+									</Anchors>
+									<Color r="0" g="0" b="0" a="0.5"/>
+								</Texture>
+							</Layer>
+						</Layers>
+
+						<Frames frameStrata="HIGH">
+							<Button name="TP_ContentArrowButton">
+								<Size x="8" y="30"/>
+								<Anchors>
+									<Anchor point="RIGHT"/>
+								</Anchors>
+								<Layers>
+									<Layer level="BORDER">
+										<Texture>
+											<Size x="8" y="30"/>
+											<Anchors>
+												<Anchor point="RIGHT"/>
+											</Anchors>
+											<Color r="0.15" g="0.15" b="0.15" a="1"/>
+										</Texture>
+									</Layer>
+									<Layer level="OVERLAY">
+										<FontString name="$parent_Arrow" text="" font="TP_FontSubTitle">
+											<Size x="8" y="30"/>
+											<Anchors>
+												<Anchor point="RIGHT"/>
+											</Anchors>
+											<Color r="1" g="1" b="1" a="1"/>
+										</FontString>
+									</Layer>
+								</Layers>
+							</Button>
+						</Frames>
+					</Frame>
+
+					<!-- PROFILES - SCROLL VIEW -->
+					<ScrollFrame name="$parent_ScrollFrame">
+						<Size x="194" y="238"/>
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_Title" relativePoint="BOTTOMLEFT">
+								<Offset x="0" y="0"/>
+							</Anchor>
+						</Anchors>
+						<ScrollChild>
+							<Frame name="TP_Profiles_List">
+								<Size x="194" y="238"/>
+								<Anchors>
+									<Anchor point="TOPLEFT"/>
+								</Anchors>
+							</Frame>
+						</ScrollChild>
+						<Scripts>
+							<OnValueChanged>
+								SetVerticalScroll(this:GetValue())
+							</OnValueChanged>
+						</Scripts>
+						<Frames>
+							<!-- SCROLL BAR -->
+							<Slider name="TP_Slider" orientation="VERTICAL">
+								<Size x="10" y="244"/>
+								<Anchors>
+									<Anchor point="TOPRIGHT">
+										<Offset x="1" y="3"/>
+									</Anchor>
+								</Anchors>
+								<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background"
+											edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
+									<EdgeSize val="8"/>
+									<TileSize val="8"/>
+									<BackgroundInsets left="3" right="3" top="6" bottom="6"/>
+								</Backdrop>
+								<ThumbTexture file="Interface\Buttons\UI-SliderBar-Button-Horizontal">
+									<Size x="32" y="32"/>
+								</ThumbTexture>
+								<Scripts>
+									<OnValueChanged>
+										TP_Profiles_ScrollFrame:SetVerticalScroll(this:GetValue())
+									</OnValueChanged>
+									<OnShow>
+										this:SetValueStep(0)
+										this:SetValue(0)
+									</OnShow>
+								</Scripts>
+							</Slider>
+						</Frames>
+						<Layers>
+							<Layer level="BACKGROUND">
+								<Texture>
+									<Size x="194" y="238"/>
+									<Anchors>
+										<Anchor point="TOPLEFT">
+											<Offset x="0" y="0"/>
+										</Anchor>
+									</Anchors>
+									<Color r="0" g="0" b="0" a="0.5"/>
+								</Texture>
+							</Layer>
+						</Layers>
+					</ScrollFrame>
+
+					<!-- POINTS REMAINING -->
+					<Frame name="$parent_PointsRemaining">
+						<Size x="194" y="18"/>
+						<Anchors>
+							<Anchor point="TOPLEFT"  relativeTo="$parent_ScrollFrame" relativePoint="BOTTOMLEFT">
+								<Offset x="0" y="0"/>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString name="$parent_Text" text="Points remaining:" font="TP_FontSubTitleLeft">
+									<Size x="194" y="15"/>
+									<Anchors>
+										<Anchor point="LEFT">
+											<Offset x="1" y="-1"/>
+										</Anchor>
+									</Anchors>
+									<Color r="1" g="1" b="0" a="1"/>
+								</FontString>
+								<FontString name="$parent_Summary" text="(0/0/0)" font="TP_FontSubTitleRight">
+									<Size x="194" y="15"/>
+									<Anchors>
+										<Anchor point="RIGHT">
+											<Offset x="-1" y="-1"/>
+										</Anchor>
+									</Anchors>
+									<Color r="1" g="1" b="0" a="1"/>
+								</FontString>
+								<Texture>
+									<Size x="194" y="3"/>
+									<Anchors>
+										<Anchor point="TOP">
+											<Offset x="0" y="0"/>
+										</Anchor>
+									</Anchors>
+									<Color r="0.15" g="0.15" b="0.15" a="1"/>
+								</Texture>
+								<Texture>
+									<Size x="194" y="15"/>
+									<Anchors>
+										<Anchor point="TOPLEFT">
+											<Offset x="0" y="-3"/>
+										</Anchor>
+									</Anchors>
+									<Color r="0" g="0" b="0" a="0.65"/>
+								</Texture>
+							</Layer>
+						</Layers>
+					</Frame>
+
+					<!-- PROFILES - ACTIONS -->
+					<Frame name="$parent_Actions">
+						<Size x="194" y="36"/>
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_PointsRemaining" relativePoint="BOTTOMLEFT">
+								<Offset x="0" y="0"/>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer level="BORDER">
+								<Texture>
+									<Size>
+										<AbsDimension x="194" y="3"/>
+									</Size>
+									<Anchors>
+										<Anchor point="TOP">
+											<Offset>
+												<AbsDimension x="0" y="0"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+									<Color r="0.15" g="0.15" b="0.15" a="1"/>
+								</Texture>
+							</Layer>
+							<Layer level="BACKGROUND">
+								<Texture>
+									<Size>
+										<AbsDimension x="194" y="30"/>
+									</Size>
+									<Anchors>
+										<Anchor point="BOTTOM">
+											<Offset>
+												<AbsDimension x="0" y="3"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+									<Color r="0" g="0" b="0" a="0.5"/>
+								</Texture>
+							</Layer>
+						</Layers>
+						<Frames>
+							<!-- BUTTON - SYNC -->
+							<Button name="$parent_Sync">
+								<Size x="48" y="24"/>
+								<Anchors>
+									<Anchor point="LEFT">
+										<Offset x="12" y="0"/>
+									</Anchor>
+								</Anchors>
+								<Layers>
+									<Layer level="ARTWORK">
+										<FontString name="$parent_Text" text="SYNC" font="TP_FontButton">
+											<Size x="48" y="24"/>
+											<Anchors>
+												<Anchor point="CENTER"/>
+											</Anchors>
+											<Color r="1" g="1" b="1" a="1"/>
+										</FontString>
+									</Layer>
+									<Layer level="BORDER">
+										<Texture>
+											<Size x="48" y="24"/>
+											<Anchors>
+												<Anchor point="CENTER"/>
+											</Anchors>
+											<Color r="0.15" g="0.15" b="0.15" a="1"/>
+										</Texture>
+									</Layer>
+								</Layers>
+							</Button>
+							<!-- BUTTON - SAVE -->
+							<Button name="$parent_Save">
+								<Size x="48" y="24"/>
+								<Anchors>
+									<Anchor point="CENTER">
+										<Offset x="0" y="0"/>
+									</Anchor>
+								</Anchors>
+								<Layers>
+									<Layer level="ARTWORK">
+										<FontString text=" SAVE" font="TP_FontButton">
+											<Size x="48" y="24"/>
+											<Anchors>
+												<Anchor point="CENTER">
+													<Offset x="-2" y="0"/>
+												</Anchor>
+											</Anchors>
+											<Color r="1" g="1" b="1" a="1"/>
+										</FontString>
+									</Layer>
+									<Layer level="BORDER">
+										<Texture>
+											<Size x="48" y="24"/>
+											<Anchors>
+												<Anchor point="CENTER"/>
+											</Anchors>
+											<Color r="0.15" g="0.15" b="0.15" a="1"/>
+										</Texture>
+									</Layer>
+								</Layers>
+							</Button>
+							<!-- BUTTON - LOAD -->
+							<Button name="$parent_Load">
+								<Size x="48" y="24"/>
+								<Anchors>
+									<Anchor point="RIGHT">
+										<Offset x="-12" y="0"/>
+									</Anchor>
+								</Anchors>
+								<Layers>
+									<Layer level="ARTWORK">
+										<FontString text="LOAD" font="TP_FontButton">
+											<Size x="48" y="24"/>
+											<Anchors>
+												<Anchor point="CENTER"/>
+											</Anchors>
+											<Color r="1" g="1" b="1" a="1"/>
+										</FontString>
+									</Layer>
+									<Layer level="BORDER">
+										<Texture>
+											<Size x="48" y="24"/>
+											<Anchors>
+												<Anchor point="CENTER"/>
+											</Anchors>
+											<Color r="0.15" g="0.15" b="0.15" a="1"/>
+										</Texture>
+									</Layer>
+								</Layers>
+							</Button>		
+						</Frames>
+					</Frame>
+				</Frames>
+			</Frame>
+
+
+
+			<!-- TREE 1 -->
+			<Frame name="TP_Tree1">
+				<Size x="174" y="328"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="TP_Profiles" relativePoint="TOPRIGHT">
+						<Offset x="0" y="0"/>
+					</Anchor>
+				</Anchors>
+				<Frames>
+					<!-- DESCRIPTION -->
+					<Frame name="$parent_Description" inherits="TP_TreeDescriptionTemplateFrame"/>
+					<!-- CLEAR BUTTON -->
+					<Button name="$parent_ClearButton" inherits="TP_TreeClearButtonTemplate"/>
+					<!-- BACKGROUND -->
+					<ScrollFrame name="$parent_Background" inherits="TP_TreeBackgroundTemplateFrame" frameStrata="HIGH"/>
+				</Frames>
+			</Frame>
+
+			<!-- TREE 2 -->
+			<Frame name="TP_Tree2">
+				<Size x="174" y="328"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="TP_Tree1" relativePoint="TOPRIGHT">
+						<Offset x="0" y="0"/>
+					</Anchor>
+				</Anchors>
+				<Frames>
+					<!-- DESCRIPTION -->
+					<Frame name="$parent_Description" inherits="TP_TreeDescriptionTemplateFrame"/>
+					<!-- CLEAR BUTTON -->
+					<Button name="$parent_ClearButton" inherits="TP_TreeClearButtonTemplate"/>
+					<!-- BACKGROUND -->
+					<ScrollFrame name="$parent_Background" inherits="TP_TreeBackgroundTemplateFrame" frameStrata="HIGH"/>
+				</Frames>
+			</Frame>
+
+			<!-- TREE 3 -->
+			<Frame name="TP_Tree3">
+				<Size x="174" y="328"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="TP_Tree2" relativePoint="TOPRIGHT">
+						<Offset x="0" y="0"/>
+					</Anchor>
+				</Anchors>
+				<Frames>
+					<!-- DESCRIPTION -->
+					<Frame name="$parent_Description" inherits="TP_TreeDescriptionTemplateFrame"/>
+					<!-- CLEAR BUTTON -->
+					<Button name="$parent_ClearButton" inherits="TP_TreeClearButtonTemplate"/>
+					<!-- BACKGROUND -->
+					<ScrollFrame name="$parent_Background" inherits="TP_TreeBackgroundTemplateFrame" frameStrata="HIGH"/>
+				</Frames>
+			</Frame>
+		</Frames>
+	</Frame>
+
+	<Frame name="TP_SavePopup" parent="UIParent" hidden="true" movable="true" enableMouse="true"
+		   frameStrata="FULLSCREEN_DIALOG">
+		<TitleRegion setAllPoints="true"/>
+		<Size x="160" y="96"/>
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture>
+					<Size x="160" y="96"/>
+					<Anchors>
+						<Anchor point="CENTER"/>
+					</Anchors>
+					<Color r="0" g="0" b="0" a="0.75"/>
+				</Texture>
+				<FontString text="Enter name of profile." inherits="TP_FontPopupMessage">
+					<Size x="128" y="24"/>
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset x="0" y="-6"/>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+
+		<Frames>
+			<EditBox name="$parent_EditBox" letters="64">
+				<Size x="154" y="32"/>
+				<Anchors>
+					<Anchor point="TOP">
+						<Offset x="0" y="-26"/>
+					</Anchor>
+				</Anchors>
+ 				<FontString justifyH="CENTER" inherits="TP_FontNormal" />
+				<Scripts>
+					<OnEscapePressed> this:GetParent():Hide() this:SetText("") </OnEscapePressed>
+				</Scripts>
+			</EditBox>
+
+			<Button name="$parent_ButtonSave">
+				<Size x="48" y="24"/>
+				<Anchors>
+					<Anchor point="BOTTOMLEFT">
+						<Offset x="12" y="9"/>
+					</Anchor>	
+				</Anchors>
+				<Layers>
+					<Layer level="BORDER">
+						<Texture>
+							<Size x="48" y="24"/>
+							<Anchors>
+								<Anchor point="CENTER"/>
+							</Anchors>
+							<Color r="0.15" g="0.15" b="0.15" a="1"/>
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString text="Save" inherits="TP_FontButton">
+							<Size x="64" y="24"/>
+							<Anchors>
+								<Anchor point="CENTER"/>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+			</Button>
+
+			<Button name="$parent_ButtonCancel">
+				<Size x="48" y="24"/>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset x="-12" y="9"/>
+					</Anchor>	
+				</Anchors>
+				<Layers>
+					<Layer level="BORDER">
+						<Texture>
+							<Size x="48" y="24"/>
+							<Anchors>
+								<Anchor point="CENTER"/>
+							</Anchors>
+							<Color r="0.15" g="0.15" b="0.15" a="1"/>
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString text="Cancel" inherits="TP_FontButton">
+							<Size x="64" y="24"/>
+							<Anchors>
+								<Anchor point="CENTER"/>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+			</Button>
+		</Frames>
+	</Frame>
+
+	<Frame name="TP_DeleteProfilePopup" parent="UIParent" hidden="true" movable="true" enableMouse="true"
+		   frameStrata="FULLSCREEN_DIALOG">
+		<TitleRegion setAllPoints="true"/>
+		<Size x="160" y="96"/>
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture>
+					<Size x="160" y="96"/>
+					<Anchors>
+						<Anchor point="CENTER"/>
+					</Anchors>
+					<Color r="0" g="0" b="0" a="0.75"/>
+				</Texture>
+				<FontString name="$parent_Text" inherits="TP_FontPopupMessage">
+					<Size x="128" y="24"/>
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset x="0" y="-16"/>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+
+		<Frames>
+			<Button name="$parent_ButtonYes">
+				<Size x="48" y="24"/>
+				<Anchors>
+					<Anchor point="BOTTOMLEFT">
+						<Offset x="12" y="9"/>
+					</Anchor>	
+				</Anchors>
+				<Layers>
+					<Layer level="BORDER">
+						<Texture>
+							<Size x="48" y="24"/>
+							<Anchors>
+								<Anchor point="CENTER"/>
+							</Anchors>
+							<Color r="0.15" g="0.15" b="0.15" a="1"/>
+						</Texture>
+						<FontString text="Yes" inherits="TP_FontButton">
+							<Size x="64" y="24"/>
+							<Anchors>
+								<Anchor point="CENTER"/>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+			</Button>
+
+			<Button name="$parent_ButtonNo">
+				<Size x="48" y="24"/>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset x="-12" y="9"/>
+					</Anchor>	
+				</Anchors>
+				<Layers>
+					<Layer level="BORDER">
+						<Texture>
+							<Size x="48" y="24"/>
+							<Anchors>
+								<Anchor point="CENTER"/>
+							</Anchors>
+							<Color r="0.15" g="0.15" b="0.15" a="1"/>
+						</Texture>
+						<FontString text="No" inherits="TP_FontButton">
+							<Size x="64" y="24"/>
+							<Anchors>
+								<Anchor point="CENTER"/>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+			</Button>
+		</Frames>
+	</Frame>
+
+
+</Ui>

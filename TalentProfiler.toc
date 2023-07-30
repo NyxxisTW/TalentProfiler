@@ -1,0 +1,8 @@
+## Interface: 11200
+## Title: TalentProfiler
+## Author: Nyxxis
+## Version: 0.2
+## SavedVariablesPerCharacter: TALENT_PROFILES, TALENT_PROFILE_ORDER, TP_CONFIG
+
+TalentProfiler.xml
+TalentProfiler.lua
