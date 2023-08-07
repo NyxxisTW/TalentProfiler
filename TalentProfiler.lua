@@ -568,6 +568,76 @@ end
 
 
 ----------------------------------------------------------------
+------------------------ BASIC GETTERS -------------------------
+----------------------------------------------------------------
+
+
+local function GetRank(tree, talent)
+    local _,_,_,_,rank = GetTalentInfo(tree, talent)
+    return rank
+end
+
+local function GetMaxRank(tree, talent)
+    local _,_,_,_,_,maxRank = GetTalentInfo(tree, talent)
+    return maxRank
+end
+
+local function GetTier(tree, talent)
+    local _,_,tier,_,_,_ = GetTalentInfo(tree, talent)
+    return tier
+end
+
+local function GetPointsSpent(profile)
+    local points = 0
+    for tree = 1, 3 do
+        for talent in profile[tree] do
+            points = points + profile[tree][talent]
+        end
+    end
+    return points
+end
+
+local function GetPointsSpentInTree(profile, tree)
+    local points = 0
+    for talent in profile[tree] do
+        points = points + profile[tree][talent]
+    end
+    return points
+end
+
+local function GetPointsSpentSync()
+    local points = {}
+    for i = 1, 3 do
+        local _,_,spent = GetTalentTabInfo(i)
+        points[i] = spent
+    end
+    return points[1], points[2], points[3]
+end
+
+local function GetUnspentTalentPointsSync()
+    if (TP_MaxLevel) then
+        return TP_MaxTalentPoints
+    else
+        local tree1, tree2, tree3 = GetPointsSpentSync()
+        local unspent = UnitLevel("player") - tree1 - tree2 - tree3 - 9
+        return unspent
+    end
+end
+
+local function GetTalentFrame(tree, talent)
+    return getglobal("TP_Talent_"..tree.."_"..talent)
+end
+
+local function GetNextProfileNumber()
+    local index = 1
+    for p in TALENT_PROFILE_ORDER do
+        index = index + 1
+    end
+    return index
+end
+
+
+----------------------------------------------------------------
 ----------------- BASIC OPERATIONS ON PROFILES -----------------
 ----------------------------------------------------------------
 
@@ -642,75 +712,20 @@ local function SimpleLoad()
     PickTalents(DisplayProfile, 3)
 end
 
-
-----------------------------------------------------------------
------------------------- BASIC GETTERS -------------------------
-----------------------------------------------------------------
-
-
-local function GetRank(tree, talent)
-    local _,_,_,_,rank = GetTalentInfo(tree, talent)
-    return rank
-end
-
-local function GetMaxRank(tree, talent)
-    local _,_,_,_,_,maxRank = GetTalentInfo(tree, talent)
-    return maxRank
-end
-
-local function GetTier(tree, talent)
-    local _,_,tier,_,_,_ = GetTalentInfo(tree, talent)
-    return tier
-end
-
-local function GetPointsSpent(profile)
-    local points = 0
+local function IsProfileLoaded(profile)
     for tree = 1, 3 do
         for talent in profile[tree] do
-            points = points + profile[tree][talent]
+            local rank = GetRank(tree, talent)
+            if (profile[tree][talent] ~= rank) then
+                return false
+            end
         end
     end
-    return points
+    return true
 end
 
-local function GetPointsSpentInTree(profile, tree)
-    local points = 0
-    for talent in profile[tree] do
-        points = points + profile[tree][talent]
-    end
-    return points
-end
 
-local function GetPointsSpentSync()
-    local points = {}
-    for i = 1, 3 do
-        local _,_,spent = GetTalentTabInfo(i)
-        points[i] = spent
-    end
-    return points[1], points[2], points[3]
-end
 
-local function GetUnspentTalentPointsSync()
-    if (TP_MaxLevel) then
-        return TP_MaxTalentPoints
-    else
-        local tree1, tree2, tree3 = GetPointsSpentSync()
-        local unspent = UnitLevel("player") - tree1 - tree2 - tree3 - 9
-        return unspent
-    end
-end
-
-local function GetTalentFrame(tree, talent)
-    return getglobal("TP_Talent_"..tree.."_"..talent)
-end
-
-local function GetNextProfileNumber()
-    local index = 1
-    for p in TALENT_PROFILE_ORDER do
-        index = index + 1
-    end
-    return index
-end
 
 
 ----------------------------------------------------------------
@@ -1150,10 +1165,10 @@ local function TalentFrame_OnLeave()
         local dTalent = TalentDependencies[PlayerClass][tree][talent].index
         local dFrame = getglobal("TP_Talent_"..tree.."_"..dTalent)
         if (pointsInTree >= (GetTier(tree, talent) - 1) * 5) then
-            local rank = GetRank(tree, talent)
-            if (rank == maxRank) then
+            local dRank = DisplayProfile[tree][dTalent]
+            if (dRank == GetMaxRank(tree, dTalent)) then
                 SetHighlightColor(dFrame, 1, 1, 0, 1)
-            elseif (GetUnspentTalentPointsSync() > 0 or rank > 0) then
+            elseif (GetUnspentTalentPointsSync() > 0 or dRank > 0) then
                 SetHighlightColor(dFrame, 0, 1, 0, 1)
             else
                 SetHighlightColor(dFrame, 0, 0, 0, 1)
@@ -1689,7 +1704,7 @@ local function UpdateHandler()
 
         UpdateViewSync()
 
-        if (GetUnspentTalentPointsSync() <= 0) then
+        if ((GetUnspentTalentPointsSync() <= 0) or IsProfileLoaded(CurrentProfile)) then
             LoadingTalents = false
             Print("Talents loaded.")
         end
