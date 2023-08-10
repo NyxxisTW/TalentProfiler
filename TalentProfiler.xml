@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://www.blizzard.com/wow/ui/..\FrameXML\UI.xsd">
 
 
-    <Texture name="TP_TalentTextureTemplate" virtual="true">
-        <Size x="32" y="32"/>
-    </Texture>
+	<Texture name="TP_TalentTextureTemplate" virtual="true">
+		<Size x="32" y="32"/>
+	</Texture>
 
 	<Texture name="TP_TreeBackgroundTextureTemplate" virtual="true">
 		<Size x="330" y="330"/>
@@ -141,45 +141,6 @@
 			</Layer>
 		</Layers>
 	</Frame>
-
-
-
-	<!--
-		<Button name="TP_MinimapButton" enableMouse="true" movable="true" >
-		<TitleRegion setAllPoints="true"/>
-		<Size x="53" y="53"/>
-				<Anchors>
-			<Anchor point="CENTER"/>
-		</Anchors>
-
-		<Layers>
-			<Layer level="OVERLAY">
-				<Texture file="Interface\Minimap\MiniMap-TrackingBorder">
-					<Size x="54" y="54"/>
-					<Anchors>
-						<Anchor point="CENTER"/>
-					</Anchors>
-				</Texture>
-			</Layer>
-			<Layer level="BACKGROUND">
-				<Texture file="Interface\Icons\spell_nature_starfall">
-					<Size x="26" y="26"/>
-					<Anchors>
-						<Anchor point="CENTER"/>
-					</Anchors>
-				</Texture>
-			</Layer>
-			<Layer level="HIGHLIGHT">
-				<Texture file="Interface\Minimap\UI-Minimap-ZoomButton-Highlight">
-					<Size x="54" y="54"/>
-					<Anchors>
-						<Anchor point="CENTER"/>
-					</Anchors>
-				</Texture>
-			</Layer>
-			</Layers>
-	</Button>
-	-->
 
 	<!-- TREE CLEAR BUTTON -->
 	<Button name="TP_TreeClearButtonTemplate" virtual="true">
