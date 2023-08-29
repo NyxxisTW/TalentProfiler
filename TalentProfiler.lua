@@ -1,5 +1,5 @@
 SLASH_TALENTPROFILER1 = "/tp"
-
+BINDING_HEADER_TALENTPROFILER = "Talent Profiler"
 
 local Addon = CreateFrame("frame")
 
@@ -1278,7 +1278,7 @@ end
 
 local function ProfileListElement_OnMouseDown()
 	if (arg1 == "RightButton") then
-		PROFILE_TO_DELETE = profileName
+		PROFILE_TO_DELETE = this.ProfileName
 		PROFILE_TO_DELETE_FRAME = this
 		TP_DeleteProfilePopup_Text:SetText("Delete profile \""..this.ProfileName.."\"?")
 		TP_DeleteProfilePopup:Show()
@@ -1316,12 +1316,14 @@ local function ProfileListElement_OnDragStop()
 	local index = 1
 	for profileName in TALENT_PROFILES do
 		if (TALENT_PROFILES[profileName]) then
-			local target = getglobal("TP_Profiles_List_"..index)
-			if (this:GetName() ~= target:GetName() and MouseIsOver(target)) then
-				SwapProfileListElements(this, target)
-				Swap(TALENT_PROFILE_ORDER, this.ProfileName, profileName)
-				success = true
-				break
+			local target = getglobal("TP_Profiles_List_"..profileName)
+			if (target and TALENT_PROFILES[target.ProfileName]) then
+				if (this:GetName() ~= target:GetName() and MouseIsOver(target)) then
+					SwapProfileListElements(this, target)
+					Swap(TALENT_PROFILE_ORDER, this.ProfileName, profileName)
+					success = true
+					break
+				end
 			end
 			index = index + 1
 		end
@@ -1335,7 +1337,7 @@ end
 ----------------------------------------------------------------
 
 
-local function CreateProfileListElementView(profileName, index)
+local function CreateProfileListElementView(profileName)
 	local parent = TP_Profiles_List
 
 	local profileNumber = nil
@@ -1350,7 +1352,7 @@ local function CreateProfileListElementView(profileName, index)
 	local pointsT2 = GetPointsSpentInTree(TALENT_PROFILES[profileName], 2)
 	local pointsT3 = GetPointsSpentInTree(TALENT_PROFILES[profileName], 3)
 
-	local button = CreateFrame("BUTTON", parent:GetName().."_"..index, parent)
+	local button = CreateFrame("BUTTON", parent:GetName().."_"..profileName, parent)
 	button:SetWidth(185)
 	button:SetHeight(22)
 	button:SetPoint("TOPLEFT", 0.49, -0.6 + (profileNumber - 1) * -22)
@@ -1369,13 +1371,14 @@ local function CreateProfileListElementView(profileName, index)
 	background:SetPoint("CENTER", 0, 0)
 	background:SetTexture(0.15, 0.15, 0.15, 1)
 
-	local fontString = button:CreateFontString(parent:GetName().."_"..index.."_Text", "ARTWORK", "TP_FontSmall")
+	local fontString = button:CreateFontString(parent:GetName().."_"..profileName.."_Text", "ARTWORK", "TP_FontSmall")
 	fontString:SetWidth(132)
 	fontString:SetHeight(21)
 	fontString:SetPoint("TOPLEFT", 4, -1)
 	fontString:SetText(profileNumber..". "..profileName)
+	button.FontString = fontString
 	
-	local summary = button:CreateFontString(parent:GetName().."_"..index.."_Summary", "ARTWORK", "TP_FontSmallRight")
+	local summary = button:CreateFontString(parent:GetName().."_"..profileName.."_Summary", "ARTWORK", "TP_FontSmallRight")
 	summary:SetWidth(54)
 	summary:SetHeight(21)
 	summary:SetPoint("TOPRIGHT", -4, -1)
@@ -1388,13 +1391,35 @@ local function CreateProfileListView()
 	local index = 1
 	for profileName in TALENT_PROFILES do
 		if (TALENT_PROFILES[profileName]) then
-			CreateProfileListElementView(profileName, index)
+			CreateProfileListElementView(profileName)
 			index = index + 1
 		end
 	end
 	local max = index * 22 - TP_Profiles_ScrollFrame:GetHeight()
 	if (max < 0) then max = 0 end
 	TP_Slider:SetMinMaxValues(0, max)
+end
+
+local function UpdateProfileListView()
+	local parent = TP_Profiles_List
+	local index = 1
+	local missing = nil
+	for profileName in TALENT_PROFILE_ORDER do
+		if (not TALENT_PROFILES[profileName]) then
+			missing = TALENT_PROFILE_ORDER[profileName]
+			TALENT_PROFILE_ORDER[profileName] = nil
+			break
+		end
+	end
+	for profileName in TALENT_PROFILE_ORDER do
+		local profileNumber = TALENT_PROFILE_ORDER[profileName]
+		if (missing and profileNumber > missing) then
+			local element = getglobal(parent:GetName().."_"..profileName)
+			element:SetPoint("TOPLEFT", 0.49, -0.6 + (profileNumber - 2) * -22)
+			element.FontString:SetText((profileNumber - 1)..". "..profileName)
+			TALENT_PROFILE_ORDER[profileName] = profileNumber - 1
+		end
+	end
 end
 
 
@@ -1449,6 +1474,10 @@ local function SyncButton_OnClick()
 		Print("Synchronization Off")
 		SetHighlightColor(this, 0, 0, 0, 1)
 	end
+	if (SelectedProfileFrame) then
+		SetHighlightColor(SelectedProfileFrame, 0, 0, 0, 1)
+		SelectedProfileFrame = nil
+	end
 end
 
 
@@ -1482,7 +1511,7 @@ local function PopupSaveOk_OnClick()
 		Print("Invalid profile name.")
 	else
 		SaveProfile(profileName)
-		local index = 1
+		local index = 0
 		for p in TALENT_PROFILES do
 			if (TALENT_PROFILES[p]) then
 				index = index + 1
@@ -1521,11 +1550,12 @@ local function PopupDeleteYes_OnClick()
 	TP_Slider:SetMinMaxValues(0, max)
 
 	TALENT_PROFILES[PROFILE_TO_DELETE] = nil
-	TALENT_PROFILE_ORDER[PROFILE_TO_DELETE] = nil
+	--TALENT_PROFILE_ORDER[PROFILE_TO_DELETE] = nil
 	PROFILE_TO_DELETE_FRAME:Hide()
 	this:GetParent():Hide()
 	PROFILE_TO_DELETE = nil
 	PROFILE_TO_DELETE_FRAME = nil
+	UpdateProfileListView()
 end
 
 local function PopupDeleteNo_OnClick()
@@ -1707,6 +1737,10 @@ local function UpdateHandler()
 		if ((GetUnspentTalentPointsSync() <= 0) or IsProfileLoaded(CurrentProfile)) then
 			LoadingTalents = false
 			Print("Talents loaded.")
+			if (SelectedProfileFrame) then
+				SetHighlightColor(SelectedProfileFrame, 0, 0, 0, 1)
+				SelectedProfileFrame = nil
+			end
 		end
 	end
 end
@@ -1791,13 +1825,17 @@ local function CommandSave(msg)
 	return false
 end
 
+function TP_ToggleMainFrame()
+	if (TP_MainFrame:IsShown()) then
+		TP_MainFrame:Hide()
+	else
+		TP_MainFrame:Show()
+	end
+end
+
 local function CommandToggle(msg)
 	if (msg == "toggle") then
-		if (TP_MainFrame:IsShown()) then
-			TP_MainFrame:Hide()
-		else
-			TP_MainFrame:Show()
-		end
+		TP_ToggleMainFrame()
 		return true
 	end
 	return false
