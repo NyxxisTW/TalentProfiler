@@ -1,0 +1,3 @@
+<Bindings>
+    <Binding name="Toggle Main Window" header="TALENTPROFILER">TP_ToggleMainFrame()</Binding>
+</Bindings>
