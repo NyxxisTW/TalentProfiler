@@ -1109,8 +1109,8 @@ end
 
 local function TalentFrame_OnMouseDown()
 	local profile = DisplayProfile
-	local tree = this.Tree
-	local talent = this.Talent
+	local tree = self.Tree
+	local talent = self.Talent
 
 	if (arg1 == "LeftButton") then
 		if (not HasFreePoints(GetPointsSpent(profile))) then return end
@@ -1135,9 +1135,9 @@ local function TalentFrame_OnMouseDown()
 end
 
 local function TalentFrame_OnEnter()
-	SetHighlightColor(this, 1, 0, 1, 1)
-	local tree = this.Tree
-	local talent = this.Talent
+	SetHighlightColor(self, 1, 0, 1, 1)
+	local tree = self.Tree
+	local talent = self.Talent
 	if (TalentDependencies[PlayerClass][tree][talent]) then
 		local dTalent = TalentDependencies[PlayerClass][tree][talent].index
 		local dFrame = getglobal("TP_Talent_"..tree.."_"..dTalent)
@@ -1151,8 +1151,8 @@ end
 local function TalentFrame_OnLeave()
 	GameTooltip:Hide()
 	local profile = DisplayProfile
-	local tree = this.Tree
-	local talent = this.Talent
+	local tree = self.Tree
+	local talent = self.Talent
 	local pointsTotal = GetPointsSpent(profile)
 	local hasFreePoints
 	if (TP_MaxLevel) then
@@ -1254,42 +1254,42 @@ end
 
 
 local function ProfileListElement_OnEnter()
-	SetHighlightColor(this, 1, 0, 1, 1)
+	SetHighlightColor(self, 1, 0, 1, 1)
 end
 
 local function ProfileListELement_OnLeave()
-	if (this == SelectedProfileFrame) then
-		SetHighlightColor(this, 1, 1, 0, 1)
+	if (self == SelectedProfileFrame) then
+		SetHighlightColor(self, 1, 1, 0, 1)
 	else
-		SetHighlightColor(this, 0, 0, 0, 1)
+		SetHighlightColor(self, 0, 0, 0, 1)
 	end
 end
 
 local function ProfileListElement_OnClick()
-	CopyProfile(TALENT_PROFILES[this.ProfileName], DisplayProfile)
+	CopyProfile(TALENT_PROFILES[self.ProfileName], DisplayProfile)
 	UpdatePointsSpentTrackers(DisplayProfile)
 	UpdateView(DisplayProfile)
-	SetHighlightColor(this, 1, 1, 0, 1)
-	if (SelectedProfileFrame and SelectedProfileFrame ~= this) then
+	SetHighlightColor(self, 1, 1, 0, 1)
+	if (SelectedProfileFrame and SelectedProfileFrame ~= self) then
 		SetHighlightColor(SelectedProfileFrame, 0, 0, 0, 1)
 	end
-	SelectedProfileFrame = this
+	SelectedProfileFrame = self
 end
 
 local function ProfileListElement_OnMouseDown()
 	if (arg1 == "RightButton") then
-		PROFILE_TO_DELETE = this.ProfileName
-		PROFILE_TO_DELETE_FRAME = this
-		TP_DeleteProfilePopup_Text:SetText("Delete profile \""..this.ProfileName.."\"?")
+		PROFILE_TO_DELETE = self.ProfileName
+		PROFILE_TO_DELETE_FRAME = self
+		TP_DeleteProfilePopup_Text:SetText("Delete profile \""..self.ProfileName.."\"?")
 		TP_DeleteProfilePopup:Show()
 	else
-		this:SetMovable(true)
+		self:SetMovable(true)
 	end
 end
 
 local function ProfileListElement_OnDragStart()
-	TP_DragPoint,_,_,TP_DragX,TP_DragY = this:GetPoint()
-	this:StartMoving()
+	TP_DragPoint,_,_,TP_DragX,TP_DragY = self:GetPoint()
+	self:StartMoving()
 end
 
 local function SwapProfileListElements(button1, button2)
@@ -1311,16 +1311,17 @@ local function SwapProfileListElements(button1, button2)
 	fontString2:SetText(index1..string.sub(name2, start2))
 end
 local function ProfileListElement_OnDragStop()
-	this:StopMovingOrSizing()
+	self:StopMovingOrSizing()
 	local success = false
 	local index = 1
 	for profileName in TALENT_PROFILES do
 		if (TALENT_PROFILES[profileName]) then
-			local target = getglobal("TP_Profiles_List_"..profileName)
+			local profileID = string.sub(tostring(TALENT_PROFILES[profileName]), 8)
+			local target = getglobal(TP_Profiles_List:GetName().."_"..profileID)
 			if (target and TALENT_PROFILES[target.ProfileName]) then
-				if (this:GetName() ~= target:GetName() and MouseIsOver(target)) then
-					SwapProfileListElements(this, target)
-					Swap(TALENT_PROFILE_ORDER, this.ProfileName, profileName)
+				if (self:GetName() ~= target:GetName() and MouseIsOver(target)) then
+					SwapProfileListElements(self, target)
+					Swap(TALENT_PROFILE_ORDER, self.ProfileName, profileName)
 					success = true
 					break
 				end
@@ -1328,7 +1329,7 @@ local function ProfileListElement_OnDragStop()
 			index = index + 1
 		end
 	end
-	if (not success) then this:SetPoint(TP_DragPoint, TP_DragX, TP_DragY) end
+	if (not success) then self:SetPoint(TP_DragPoint, TP_DragX, TP_DragY) end
 end
 
 
@@ -1352,7 +1353,10 @@ local function CreateProfileListElementView(profileName)
 	local pointsT2 = GetPointsSpentInTree(TALENT_PROFILES[profileName], 2)
 	local pointsT3 = GetPointsSpentInTree(TALENT_PROFILES[profileName], 3)
 
-	local button = CreateFrame("BUTTON", parent:GetName().."_"..profileName, parent)
+	local profileID = string.sub(tostring(TALENT_PROFILES[profileName]), 8)
+	local buttonName = parent:GetName().."_"..profileID
+
+	local button = CreateFrame("BUTTON", buttonName, parent)
 	button:SetWidth(185)
 	button:SetHeight(22)
 	button:SetPoint("TOPLEFT", 0.49, -0.6 + (profileNumber - 1) * -22)
@@ -1371,14 +1375,14 @@ local function CreateProfileListElementView(profileName)
 	background:SetPoint("CENTER", 0, 0)
 	background:SetTexture(0.15, 0.15, 0.15, 1)
 
-	local fontString = button:CreateFontString(parent:GetName().."_"..profileName.."_Text", "ARTWORK", "TP_FontSmall")
+	local fontString = button:CreateFontString(buttonName.."_Text", "ARTWORK", "TP_FontSmall")
 	fontString:SetWidth(132)
 	fontString:SetHeight(21)
 	fontString:SetPoint("TOPLEFT", 4, -1)
 	fontString:SetText(profileNumber..". "..profileName)
 	button.FontString = fontString
 	
-	local summary = button:CreateFontString(parent:GetName().."_"..profileName.."_Summary", "ARTWORK", "TP_FontSmallRight")
+	local summary = button:CreateFontString(buttonName.."_Summary", "ARTWORK", "TP_FontSmallRight")
 	summary:SetWidth(54)
 	summary:SetHeight(21)
 	summary:SetPoint("TOPRIGHT", -4, -1)
@@ -1429,11 +1433,11 @@ end
 
 
 local function StandardButton_OnEnter()
-	SetHighlightColor(this, 1, 0, 1, 1)
+	SetHighlightColor(self, 1, 0, 1, 1)
 end
 
 local function StandardButton_OnLeave()
-	SetHighlightColor(this, 0, 0, 0, 1)
+	SetHighlightColor(self, 0, 0, 0, 1)
 end
 
 
@@ -1443,11 +1447,11 @@ end
 
 
 local function CloseButton_OnEnter()
-	SetHighlightColor(this, 1, 0, 0, 1)
+	SetHighlightColor(self, 1, 0, 0, 1)
 end
 
 local function CloseButton_OnLeave()
-	SetHighlightColor(this, 0, 0, 0, 0)
+	SetHighlightColor(self, 0, 0, 0, 0)
 end
 
 
@@ -1458,9 +1462,9 @@ end
 
 local function SyncButton_OnLeave()
 	if (TP_CONFIG.SyncWithCurrentTalents) then
-		SetHighlightColor(this, 1, 0, 0, 1)
+		SetHighlightColor(self, 1, 0, 0, 1)
 	else
-		SetHighlightColor(this, 0, 0, 0, 1)
+		SetHighlightColor(self, 0, 0, 0, 1)
 	end
 end
 
@@ -1468,11 +1472,11 @@ local function SyncButton_OnClick()
 	TP_CONFIG.SyncWithCurrentTalents = not TP_CONFIG.SyncWithCurrentTalents
 	if (TP_CONFIG.SyncWithCurrentTalents) then
 		Print("Synchronization On")
-		SetHighlightColor(this, 1, 0, 0, 1)
+		SetHighlightColor(self, 1, 0, 0, 1)
 		UpdateViewSync()
 	else
 		Print("Synchronization Off")
-		SetHighlightColor(this, 0, 0, 0, 1)
+		SetHighlightColor(self, 0, 0, 0, 1)
 	end
 	if (SelectedProfileFrame) then
 		SetHighlightColor(SelectedProfileFrame, 0, 0, 0, 1)
@@ -1495,7 +1499,7 @@ local function LoadButton_OnClick()
 		Print("Loading talents...")
 		SimpleLoad()
 	else
-		Print("This build cannot be applied with currenly picked talents.")
+		Print("self build cannot be applied with currenly picked talents.")
 	end
 end
 
@@ -1552,14 +1556,14 @@ local function PopupDeleteYes_OnClick()
 	TALENT_PROFILES[PROFILE_TO_DELETE] = nil
 	--TALENT_PROFILE_ORDER[PROFILE_TO_DELETE] = nil
 	PROFILE_TO_DELETE_FRAME:Hide()
-	this:GetParent():Hide()
+	self:GetParent():Hide()
 	PROFILE_TO_DELETE = nil
 	PROFILE_TO_DELETE_FRAME = nil
 	UpdateProfileListView()
 end
 
 local function PopupDeleteNo_OnClick()
-	this:GetParent():Hide()
+	self:GetParent():Hide()
 	PROFILE_TO_DELETE = nil
 	PROFILE_TO_DELETE_FRAME = nil
 end
@@ -1615,7 +1619,7 @@ end
 
 
 local function TreeClearButton_OnClick()
-	local tree = tonumber(string.sub(this:GetName(), 8, 8))
+	local tree = tonumber(string.sub(self:GetName(), 8, 8))
 	for talent in DisplayProfile[tree] do
 		DisplayProfile[tree][talent] = 0
 	end
